@@ -1,0 +1,12 @@
+{
+  "deployment": {
+    "name": "intel_api",
+    "type": "advancedio",
+    "stack": "python3_9",
+    "memory": 256,
+    "timeout": 30,
+    "source": "main.py",
+    "access": "authenticated",
+    "description": "REST API serving the filtered competitor post feed to the web client. Restricted to authenticated Catalyst users."
+  }
+}

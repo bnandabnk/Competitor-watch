@@ -1,0 +1,6 @@
+# Python packages for the intel_collector job function.
+# Catalyst installs these automatically when the function is deployed.
+
+zcatalyst-sdk     # Catalyst SDK — Data Store reads and writes
+feedparser        # Parses competitor blog RSS/XML feeds
+anthropic         # Official Anthropic SDK — classifies posts with Claude AI

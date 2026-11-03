@@ -1,0 +1,12 @@
+{
+  "deployment": {
+    "name": "intel_collector",
+    "type": "job",
+    "stack": "python3_9",
+    "memory": 512,
+    "timeout": 900,
+    "source": "main.py",
+    "entry_point": "handler",
+    "description": "Scrapes competitor blog RSS feeds, classifies new posts with Claude AI, and stores them in the COMPETITOR_POSTS Data Store table."
+  }
+}

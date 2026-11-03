@@ -1,0 +1,5 @@
+# Python packages for the intel_api Advanced I/O function.
+# Catalyst installs these automatically when the function is deployed.
+
+zcatalyst-sdk     # Catalyst SDK — ZCQL queries against the Data Store
+flask             # Web framework that handles the HTTP routing

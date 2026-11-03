@@ -1,0 +1,13 @@
+{
+  "project_name": "competitor-watch",
+  "functions": {
+    "source": "functions",
+    "targets": [
+      "intel_collector",
+      "intel_api"
+    ]
+  },
+  "client": {
+    "source": "client"
+  }
+}

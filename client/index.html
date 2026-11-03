@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport tells mobile browsers to use the device width instead of
+       pretending to be a 980px desktop, so the layout is readable on phones. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitor Watch</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- The Catalyst Web SDK. It gives us catalyst.auth.* for the login gate.
+       Catalyst serves this file automatically from the hosted client. -->
+  <script src="/__catalyst/sdk/init.js"></script>
+</head>
+<body>
+
+  <!-- ══ LOADING GATE ══════════════════════════════════════════════════════
+       Shown first, while we check whether the visitor is signed in.
+       Nothing else renders until that check finishes. -->
+  <div id="auth-check" class="full-screen">
+    <p class="muted">Checking your access…</p>
+  </div>
+
+  <!-- ══ MAIN APP ══════════════════════════════════════════════════════════
+       hidden until authentication succeeds. The `hidden` attribute is plain
+       HTML — the browser does not render elements that carry it. -->
+  <div id="app" hidden>
+
+    <header class="site-header">
+      <div>
+        <h1>Competitor Watch</h1>
+        <p class="muted" id="result-count">Loading…</p>
+      </div>
+      <button id="logout-btn" class="text-btn">Sign out</button>
+    </header>
+
+    <div class="layout">
+
+      <!-- ══ SIDEBAR: filters ══════════════════════════════════════════════ -->
+      <aside class="sidebar">
+
+        <div class="filter-group">
+          <label class="filter-title" for="days-select">Time range</label>
+          <select id="days-select">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="">All time</option>
+          </select>
+        </div>
+
+        <!-- These three lists are filled in by app.js from GET /filters,
+             so they only ever show values that actually exist in the data. -->
+        <div class="filter-group">
+          <p class="filter-title">Competitor</p>
+          <div id="competitor-filters" class="checkbox-list"></div>
+        </div>
+
+        <div class="filter-group">
+          <p class="filter-title">Urgency</p>
+          <div id="urgency-filters" class="checkbox-list"></div>
+        </div>
+
+        <div class="filter-group">
+          <p class="filter-title">Theme</p>
+          <div id="theme-filters" class="checkbox-list"></div>
+        </div>
+
+        <button id="clear-filters" class="text-btn">Clear all filters</button>
+      </aside>
+
+      <!-- ══ MAIN COLUMN: search + feed ════════════════════════════════════ -->
+      <main class="feed-column">
+
+        <input
+          type="search"
+          id="search-input"
+          placeholder="Search titles and summaries…"
+          autocomplete="off">
+
+        <!-- Posts are injected here by app.js -->
+        <div id="feed"></div>
+
+        <!-- Shown only when a query returns zero rows -->
+        <div id="empty-state" class="notice" hidden>
+          No posts match these filters.
+        </div>
+
+        <!-- Shown only when the API call fails -->
+        <div id="error-state" class="notice error" hidden></div>
+
+        <!-- Appends the next page of results rather than replacing the list -->
+        <button id="load-more" class="load-more" hidden>Load more</button>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
