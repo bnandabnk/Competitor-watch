@@ -50,6 +50,18 @@ const state = {
  * user has a valid session and rejects when they do not.
  */
 async function checkAuth() {
+  // Guard: if the SDK scripts failed to load, `catalyst` is undefined.
+  // Without this check we would blindly redirect to the login URL and the
+  // user would just see a bare 404 with no clue what went wrong.
+  if (typeof catalyst === "undefined" || !catalyst.auth) {
+    showFatal(
+      "The Catalyst SDK did not load. Check that both SDK script tags are " +
+      "present in index.html and that this page is served by Catalyst " +
+      "(catalyst serve / catalyst deploy) rather than opened as a local file."
+    );
+    return;
+  }
+
   try {
     await catalyst.auth.isUserAuthenticated();
 
@@ -62,10 +74,36 @@ async function checkAuth() {
     await loadPosts({ reset: true });
 
   } catch (err) {
-    // Not signed in — send them to Catalyst's hosted login page.
-    // Catalyst returns them here automatically once they authenticate.
-    window.location.href = "/__catalyst/auth/login";
+    // Not signed in. /__catalyst/auth/login is Catalyst's own hosted login
+    // page — but it only exists once Authentication is enabled for the
+    // project in the console. If it is not, this redirect lands on a 404,
+    // so we say so explicitly rather than leaving a dead end.
+    console.warn("Not authenticated:", err);
+    showFatal(
+      "You are not signed in. Redirecting to the login page… " +
+      "If you land on a 404, Authentication has not been enabled for this " +
+      "Catalyst project yet (console - Authentication - set up Hosted Login)."
+    );
+    // Small delay so the message is readable if the redirect does 404.
+    setTimeout(() => { window.location.href = "/__catalyst/auth/login"; }, 1500);
   }
+}
+
+/*
+ * Replaces the loading gate with an error message.
+ * Used for failures that happen before the app can render at all.
+ */
+function showFatal(message) {
+  const gate = document.getElementById("auth-check");
+  gate.innerHTML = "";
+
+  const box = document.createElement("div");
+  box.className = "notice error";
+  box.style.maxWidth = "32rem";
+  box.textContent = message;
+
+  gate.appendChild(box);
+  gate.hidden = false;
 }
 
 

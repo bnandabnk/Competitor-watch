@@ -1,5 +1,4 @@
 {
-  "project_name": "competitor-watch",
   "functions": {
     "source": "functions",
     "targets": [
